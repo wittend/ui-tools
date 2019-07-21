@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--
+// Code for the:   ui-tools project.
+// Created:        2019/07/02
+// Copyright (c):  David M. Witten II
+-->
+<html>
+    <head id='theHead'>
+        <title>rfStack Demo</title>
+        <meta charset='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
+        <link type='text/css' rel='stylesheet' href='rfstack.css'>
+        <script type='text/javascript' src='defaulthandlers.js' ></script>
+        <script type='text/javascript' src='rflayer.js' ></script>
+        <script type='text/javascript' src='rfstack.js' ></script>
+        <script type='text/javascript'>
+            // jshint unused:           false
+            // jshint undef:            false
+            
+            let mh = new MouseHandler();
+            
+            document.addEventListener('DOMContentLoaded', function()
+            {
+                let el;
+                el = document.querySelector('#btnDraw').onclick     = btnClick;
+                el = document.querySelector('#btnMeasure').onclick  = btnClick;
+                el = document.querySelector('#btnHideAll').onclick  = btnClick;
+                el = document.querySelector('#btnShowAll').onclick  = btnClick;
+                el = document.querySelector('#btnClearAll').onclick = localClearAll;        // must reference a local function which *calls* the  widget's handler or the handler will execute in the local context.
+
+                let stack = document.querySelector('#newStack');
+                //stack.layerMouseDown('layer2', localMouseDown);
+                //stack.layerMouseMove('layer2', localMouseMove);
+                //stack.layerMouseUp('layer2',   localMouseUp);
+                
+                stack.layerMouseDown('layer2', mh.mouseDown);
+                stack.layerMouseMove('layer2', mh.mouseMove);
+                stack.layerMouseUp('layer2',   mh.mouseUp);
+            });
+            
+            function localClearAll(e)
+            {
+                console.log(`non-default localClearAll received by: [ ${e.currentTarget.id} ].`);
+                document.querySelector('#newStack').clearAll();
+            }
+
+            let ctx = null;
+            let mouseDown = false;
+
+            function localMouseDown(e)
+            {
+                // console.log(`non-default MouseDown received by: [ ${e.currentTarget.id}].`);
+                console.log(`non-default localMouseDown received by: [ '#${this.parentNode.host.id}' ].`);
+                ctx = this.parentNode.host._canvas.getContext('2d');
+                // let canvas = this.parentNode.host._canvas;
+                // let ctx2 = this.parentNode.host.canvas.getContext('2d');
+ 
+                ctx.strokeStyle = "#FF0000";
+                mouseDown = true;
+                ctx.beginPath();
+                ctx.moveTo(e.clientX, e.clientY);
+            }
+            
+            function localMouseMove(e)
+            {
+                // console.log(`non-default MouseDown received by: [ ${e.currentTarget.id}].`);
+                //    console.log(`non-default localMouseMove received by: [ '#${this.parentNode.host.id}' ].`);
+                //    let ctx = this.parentNode.host._canvas.getContext('2d');
+                //    let canvas = this.parentNode.host._canvas;
+                //    let ctx2 = this.parentNode.host.canvas.getContext('2d');
+                if(mouseDown)
+                {
+                    ctx.lineTo(e.clientX, e.clientY);
+                    ctx.stroke();
+                }
+            }
+            
+            function localMouseUp(e)
+            {
+                // console.log(`non-default MouseDown received by: [ ${e.currentTarget.id}].`);
+                console.log(`non-default localMouseUp received by: [ '#${this.parentNode.host.id}' ].`);
+                //let ctx = this.parentNode.host._canvas.getContext('2d');
+                //let canvas = this.parentNode.host._canvas;
+                //let ctx2 = this.parentNode.host.canvas.getContext('2d');
+                if(mouseDown)
+                {
+                    ctx.lineTo(e.clientX, e.clientY);
+                    ctx.stroke();
+                }
+                mouseDown = false;                
+            }
+            
+            function btnClick(e)
+            {
+                console.log(`btnClick received by: [ ${e.currentTarget.id} ].`);
+            }
+            
+            function msg(e)
+            {
+                //alert('Got: ${e.eventName} from: ${e.target}.')
+                alert(`Got: ${e.currentTarget.id}.`);
+            }
+
+        </script> 
+    </head>
+    <body id='theBody'>
+        <div id='topFrame' class='topFrameClass'>
+            <div id='positionFrame' class='positionFrameClass'>
+    
+                <rf-canvasstack id='newStack'>
+                    <img id='img0' slot='baseImgSlot' role='layer' src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/CHUNKIE.JPG'>
+                    <rf-canvaslayer id='layer0' slot='canvasSlot' role='layer'></rf-canvaslayer>
+                    <rf-canvaslayer id='layer1' slot='canvasSlot' role='layer'></rf-canvaslayer>
+                    <rf-canvaslayer id='layer2' slot='canvasSlot' role='layer'></rf-canvaslayer>
+                </rf-canvasstack>
+                <div id='buttonFrame' class='positionFrameClass'>
+                    <button id='btnDraw'        class='btnClass'>Draw</button>
+                    <button id='btnMeasure'     class='btnClass'>Measure</button>
+                    <button id='btnHideAll'     class='btnClass'>Hide All</button>
+                    <button id='btnShowAll'     class='btnClass'>Show All</button>
+                    <button id='btnClearAll'    class='btnClass'>Clear All</button>
+                </div>
+                
+            </div>
+        
+        </div>
+    </body>
+</html>

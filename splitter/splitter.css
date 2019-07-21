@@ -1,0 +1,90 @@
+/*===================================================
+// splitter.css
+//
+// Code for the:   ui-tools project.
+// Created:        06/28/2019
+// Copyright (c):  David M. Witten II
+//===================================================*/
+*
+{
+    box-sizing:             border-box;
+}
+body,
+html
+{
+    font-family:            "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
+    height:                 100%;
+    width:                  100%;
+    padding:                0px;
+    margin:                 0;
+}
+#topFrame
+{
+    text-align:             center;
+    position:               absolute;
+    height:                 100%;
+    width:                  100%;
+    border:                 1px solid #c0c0c0;
+    display:                flex;
+    flex-direction:         column;
+    flex-basis:             calc(30% - 5px)
+}
+#frameDiv
+{
+    height:                 100%;
+    border:                 1px solid #c0c0c0;
+    display:                flex;
+    flex-direction:         row;
+}
+#one
+{
+    position:               relative;
+    overflow:               auto;
+    background-color:       green;
+}
+#two
+{
+    position:               relative;
+    overflow:               auto;
+    background-color:       red;
+}
+#three
+{
+    position:               relative;
+    overflow:               auto;
+    background-color:       yellow;
+    flex-direction:         column;
+}
+#four
+{
+    position:               relative;
+    overflow:               auto;
+    background-color:       blue;
+    flex-direction:         column;
+}
+
+.gutter
+{
+    background-color:       #eee;
+    background-repeat:      no-repeat;
+    background-position:    50%;
+}
+.gutter.gutter-horizontal
+{
+    background-image:       url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor:                 ew-resize;
+    border-left:            1px solid #c0c0c0;
+    border-right:           1px solid #c0c0c0;
+}
+.gutter.gutter-vertical
+{
+    background-image:       url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor:                 ns-resize;
+    border-top:             1px solid #c0c0c0;
+    border-bottom:          1px solid #c0c0c0;
+}
+.gutter.gutter-horizontal
+{
+    height:                 100%;
+    float:                  left;
+}

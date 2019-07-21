@@ -1,0 +1,28 @@
+html,
+body
+{
+    background-color:       #E0E0FF;
+    font-size:              95%;
+    font-family:            "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
+    overflow:               hidden;
+}
+#topFrame
+{
+    position:               relative;
+    top:                    0px;
+    left:                   0px;
+    display:                block;
+    height:                 100%;
+    width:                  100%;
+    padding:                0.0em;
+    margin:                 0;
+}
+rf-canvasstack
+{
+    position:               static;
+}
+
+rf-canvaslayer
+{
+    background:             transparent;
+}
