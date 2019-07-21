@@ -19,7 +19,7 @@ body
 }
 rf-canvasstack
 {
-    position:               static;
+    position:               relative;
 }
 
 rf-canvaslayer

@@ -83,7 +83,7 @@ class XRFCanvasStack extends HTMLElement
     //--------------------------------------------
     static get observedAttributes()
     {
-        return ['width', 'height'];
+        return ['width', 'height', 'src', 'alt'];
     }
 
     //--------------------------------------------
@@ -91,9 +91,10 @@ class XRFCanvasStack extends HTMLElement
     //--------------------------------------------
     attributeChangedCallback(attrName, oldVal, newVal)
     {
+        let l;        
+        let len;
         let cList = this.shadowRoot.querySelectorAll('.layer-canvasClass');
         const hasValue = newVal !== null;
-        const len = this.layers.length;
         if(hasValue)
         {
             //console.log(`[XRFCanvasStack]:: Value: ${name} changing from ${oldVal} to ${newVal} :: Stack length: (${len}).`);
@@ -101,9 +102,21 @@ class XRFCanvasStack extends HTMLElement
             {
                 case 'height':
                     this.style.height = newValue;
+                    l = this._alllayers();
+                    len = l.length - 1;
+                    for(let i = 0; i = len; i++)
+                    {
+                        l[i]._canvas.height = newValue;
+                    }
                     break;
                 case 'width':
                     this.style.width = newValue;
+                    l = this._alllayers();
+                    len = l.length - 1;
+                    for(let i = 0; i = len; i++)
+                    {
+                        l[i]._canvas.width  = newValue;
+                    }
                     break;
                 case 'src':
                     this.imgsrc = newVal;
@@ -283,9 +296,9 @@ class XRFCanvasStack extends HTMLElement
         const layers = this._allLayers();
         for(let i = 0; i < layers.length; i++)
         {
-            let ctx = layers[i]._canvas.getContext('2d');
             let h   = layers[i]._canvas.height;
             let w   = layers[i]._canvas.width;
+            let ctx = layers[i]._canvas.getContext('2d');
             ctx.clearRect(0, 0, w, h);
         }
     }
@@ -451,7 +464,7 @@ class XRFCanvasStack extends HTMLElement
     {
         return this.mode;
     }
-
+    
     set mouseMode(mode)
     {
         this.mode = mode;

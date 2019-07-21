@@ -17,7 +17,7 @@ class MouseHandler
 {
     // private class properties
     __ctx           = null;     // mot really private
-    __mouseDownFlag = null;     // mot really private
+    __mouseDownFlag = null;     // mot really private 
 
     //--------------------------------------------
     // ctor()

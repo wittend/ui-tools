@@ -171,30 +171,6 @@ class XRFCanvasLayer extends HTMLElement
     }
 
     //--------------------------------------------
-    // get/set selected.
-    //--------------------------------------------
-    //get selected()
-    //{
-    //    if(this.hasAttribute('selected'))
-    //    {
-    //        return this.getAttribute('selected');
-    //    }
-    //    else
-    //    {
-    //        return null;
-    //    }
-    //}
-    //
-    //set selected(val)
-    //{
-    //    const notEq = (val !== this.selected);
-    //    if(notEq)
-    //    {
-    //        this.setAttribute('selected', val);
-    //    }
-    //}
-    
-    //--------------------------------------------
     // get/set width.
     //--------------------------------------------
     get width()
@@ -267,18 +243,6 @@ class XRFCanvasLayer extends HTMLElement
         this._canvas.onmousedown = response;
     }
     
-    //--------------------------------------------
-    // get/set mouseMode.
-    //--------------------------------------------
-    //get mouseMode()
-    //{
-    //    return this.mode;
-    //}
-    //
-    //set mouseMode(mode)
-    //{
-    //    this.mode = mode;
-    //}
 }
 
 //--------------------------------------------
