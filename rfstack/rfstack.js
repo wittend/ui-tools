@@ -93,7 +93,7 @@ class XRFCanvasStack extends HTMLElement
     {
         let l;        
         let len;
-        let cList = this.shadowRoot.querySelectorAll('.layer-canvasClass');
+        //let cList = this.shadowRoot.querySelectorAll('.layer-canvasClass');
         const hasValue = newVal !== null;
         if(hasValue)
         {

@@ -22,10 +22,6 @@ layerTmpl.innerHTML = `
             left:                   0px;
             display:                block;
             position:               absolute;
-/*            
-            flex-direction:         column;
-            flex-basis:             100%;
-*/
             background-color:       #FFFF66ee;
             height:                 100%;
             width:                  100%;
@@ -130,11 +126,9 @@ class XRFCanvasLayer extends HTMLElement
         {   
             this.classList.add('stackLayer-CanvasClass');
         }
-        //if(!this.hasAttribute('selected'))
-        //{
-        //    this.setAttribute('selected', 'false');
-        //}
         this._canvas    = this.shadowRoot.querySelector('.layer-canvasClass');
+        this._canvas.height = p.clientHeight;
+        this._canvas.width = p.clientWidth;
     }
     
     //--------------------------------------------
