@@ -120,13 +120,20 @@ class XRFCanvasLayer extends HTMLElement
     connectedCallback()
     {
         let p = this.parentNode;
-        this.parentNode.lastChild.style.zIndex = p._canvasCount; 
+        //let im = 
+        p.lastChild.style.zIndex = p._canvasCount; 
         console.log(`[ XRFCanvasLayer ].connectedCallback() :: New layer: [ ${this.id} ] :: Parent: [ ${p.id} ] :: Stack length: [ ${p._canvasCount} ].`);
         if(!this.classList.contains('stackLayer-CanvasClass'))
         {   
             this.classList.add('stackLayer-CanvasClass');
         }
-        this._canvas    = this.shadowRoot.querySelector('.layer-canvasClass');
+        //if((p.querySelector('#stackbaseImg')
+        //{
+        //    
+        //}
+
+        this._canvas = this.shadowRoot.querySelector('.layer-canvasClass');
+        this._canvas.id = this.id + '-canvas';
         this._canvas.height = p.clientHeight;
         this._canvas.width = p.clientWidth;
     }

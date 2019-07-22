@@ -20,24 +20,21 @@ tmplStack.innerHTML = `
     <style>
         :host
         {
-/*        
             height:                 300px;
             width:                  300px;
-*/
             position:               relative;
             display:                block;
-/*        
-            flex-direction:         column;
-            flex-basis:             100%;
-*/
             background-color:       #FF66FF00;
             contain:                content;
         }
         ::slotted(rf-canvaslayer)
         {
-        /*
-            flex-basis: 100%;
-        */
+        }
+        #img0
+        {
+            height:                 auto;
+            width:                  auto;
+            display:                none;
         }
     </style>
     <slot id='baseImgSlot' name='baseImgSlot'>
@@ -48,8 +45,6 @@ tmplStack.innerHTML = `
         <summary>Slot to accomodate canvas elements.</summary>
     </slot>
 `;
-
-//            border:                 2px #a8a8a8 inset;
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // <XRFCanvasStack>    [A stack of canvas elements]
@@ -175,7 +170,7 @@ class XRFCanvasStack extends HTMLElement
     {
         const pEl = this.parentNode.host;    //.querySelector('rf-canvaslayer');
         pEl._canvasCount++;
-        console.log(`[ XRFCanvasStack#${this.id} ]._onCanvasSlotChange() : canvasCount: [ ${pEl._canvasCount} ].`);
+        console.log(`[ XRFCanvasStack#${this.id} ]._onCanvasSlotChange() : canvasCount: [ ${pEl._canvasCount} ] id: [ ${pEl.lastElementChild.id} ].`);
     }
 
     //--------------------------------------------
@@ -185,7 +180,9 @@ class XRFCanvasStack extends HTMLElement
     {
         const pEl = this.parentNode.host;
         pEl._imageCount++;
-        console.log(`[ XRFCanvasStack#${this.id} ]._onImgSlotChange() : imageCount: [ ${pEl._imageCount} ].`);
+        //pEl.clientHeight = pEl.lastElementChild.height;
+        //pEl.clientWidth = pEl.lastElementChild.width;
+        console.log(`[ XRFCanvasStack#${this.id} ]._onImgSlotChange() : imageCount: [ ${pEl._imageCount} ] id: [ ${pEl.lastElementChild.id} ].`);
     }
     
     //============================================
@@ -323,7 +320,7 @@ class XRFCanvasStack extends HTMLElement
         const layers = this._allLayers();
         for(let i = 0; i < layers.length; i++)
         {
-            this.layers[i].style.visibility = 'hidden';
+            layers[i]._canvas.style.visibility = 'hidden';
         }
     }
 

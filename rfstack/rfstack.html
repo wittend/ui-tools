@@ -24,8 +24,8 @@
                 let el;
                 el = document.querySelector('#btnDraw').onclick     = btnClick;
                 el = document.querySelector('#btnMeasure').onclick  = btnClick;
-                el = document.querySelector('#btnHideAll').onclick  = btnClick;
-                el = document.querySelector('#btnShowAll').onclick  = btnClick;
+                el = document.querySelector('#btnHideAll').onclick  = localHideAll;
+                el = document.querySelector('#btnShowAll').onclick  = localShowAll;
                 el = document.querySelector('#btnClearAll').onclick = localClearAll;        // must reference a local function which *calls* the  widget's handler or the handler will execute in the local context.
 
                 let stack = document.querySelector('#newStack');
@@ -38,6 +38,18 @@
                 stack.layerMouseUp('layer2',   mh.mouseUp);
             });
             
+            function localHideAll(e)
+            {
+                console.log(`non-default localHideAll received by: [ ${e.currentTarget.id} ].`);
+                document.querySelector('#newStack').hideAll();
+            }
+
+            function localShowAll(e)
+            {
+                console.log(`non-default localShowAll received by: [ ${e.currentTarget.id} ].`);
+                document.querySelector('#newStack').showAll();
+            }
+
             function localClearAll(e)
             {
                 console.log(`non-default localClearAll received by: [ ${e.currentTarget.id} ].`);
@@ -108,10 +120,13 @@
             <div id='positionFrame' class='positionFrameClass'>
     
                 <rf-canvasstack id='newStack'>
+
                     <img id='img0' slot='baseImgSlot' role='layer' src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/CHUNKIE.JPG'>
+
                     <rf-canvaslayer id='layer0' slot='canvasSlot' role='layer'></rf-canvaslayer>
                     <rf-canvaslayer id='layer1' slot='canvasSlot' role='layer'></rf-canvaslayer>
                     <rf-canvaslayer id='layer2' slot='canvasSlot' role='layer'></rf-canvaslayer>
+
                 </rf-canvasstack>
                 <div id='buttonFrame' class='positionFrameClass'>
                     <button id='btnDraw'        class='btnClass'>Draw</button>
