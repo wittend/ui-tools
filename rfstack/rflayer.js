@@ -127,11 +127,6 @@ class XRFCanvasLayer extends HTMLElement
         {   
             this.classList.add('stackLayer-CanvasClass');
         }
-        //if((p.querySelector('#stackbaseImg')
-        //{
-        //    
-        //}
-
         this._canvas = this.shadowRoot.querySelector('.layer-canvasClass');
         this._canvas.id = this.id + '-canvas';
         this._canvas.height = p.clientHeight;

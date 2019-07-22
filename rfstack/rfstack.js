@@ -30,16 +30,16 @@ tmplStack.innerHTML = `
         ::slotted(rf-canvaslayer)
         {
         }
-        #img0
+        #baseImg
         {
-            height:                 auto;
-            width:                  auto;
-            display:                none;
+        /*
+            visibility:             hidden;
+        */
         }
     </style>
+    <img id='baseImg' slot='baseImgSlot' role='imglayer' src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/CHUNKIE.JPG'>
     <slot id='baseImgSlot' name='baseImgSlot'>
         <summary>Slot to accomodate base image element(s).</summary>
-        <img id='stackbaseImg' class='stack-baseImgClass'>
     </slot>
     <slot id='canvasSlot' name='canvasSlot'>
         <summary>Slot to accomodate canvas elements.</summary>
@@ -61,7 +61,7 @@ class XRFCanvasStack extends HTMLElement
         this._imgalt         = '';
         this._baseImg        = null;
         this._canvasCount    = 0;
-        this._imageCount     = 0;
+        this._imageCount     = 1;
 
         this.attachShadow({mode: 'open'});
         this.shadowRoot.appendChild(tmplStack.content.cloneNode(true));
@@ -97,25 +97,26 @@ class XRFCanvasStack extends HTMLElement
             {
                 case 'height':
                     this.style.height = newValue;
-                    l = this._alllayers();
-                    len = l.length - 1;
-                    for(let i = 0; i = len; i++)
-                    {
-                        l[i]._canvas.height = newValue;
-                    }
+                    //l = this._alllayers();
+                    //len = l.length - 1;
+                    //for(let i = 0; i = len; i++)
+                    //{
+                    //    l[i]._canvas.height = newValue;
+                    //}
                     break;
                 case 'width':
                     this.style.width = newValue;
-                    l = this._alllayers();
-                    len = l.length - 1;
-                    for(let i = 0; i = len; i++)
-                    {
-                        l[i]._canvas.width  = newValue;
-                    }
+                    //l = this._alllayers();
+                    //len = l.length - 1;
+                    //for(let i = 0; i = len; i++)
+                    //{
+                    //    l[i]._canvas.width  = newValue;
+                    //}
                     break;
                 case 'src':
                     this.imgsrc = newVal;
-                    this.shadowRoot.querySelector('#baseImg').src = this.imgsrc;
+                    this._baseImg.src = newVal;
+                    //this.shadowRoot.querySelector('#baseImg').src = this.imgsrc;
                     break;
                 case 'alt':
                     this.imgalt = newVal;
@@ -139,7 +140,11 @@ class XRFCanvasStack extends HTMLElement
         console.log(`[ XRFCanvasStack#${this.id} ].connectedCallback()`);
         if(!this.hasAttribute('role'))
         {
-            this.setAttribute('role', 'layerlist');
+            this.setAttribute('role', 'layerstack');
+        }
+        if(this._baseImg == null)
+        {
+            this._baseImg = this.shadowRoot.querySelector('img#baseImg');
         }
     }
     
@@ -180,8 +185,6 @@ class XRFCanvasStack extends HTMLElement
     {
         const pEl = this.parentNode.host;
         pEl._imageCount++;
-        //pEl.clientHeight = pEl.lastElementChild.height;
-        //pEl.clientWidth = pEl.lastElementChild.width;
         console.log(`[ XRFCanvasStack#${this.id} ]._onImgSlotChange() : imageCount: [ ${pEl._imageCount} ] id: [ ${pEl.lastElementChild.id} ].`);
     }
     
@@ -211,13 +214,6 @@ class XRFCanvasStack extends HTMLElement
     _selectLayer(newLayer)
     {
         this.reset();
-        //if(!newLayer)
-        //{
-        //    throw new Error(`No panel with id ${newLayer}`);
-        //}
-        //newLayer.selected = true;
-        //newLayer.hidden = false;
-        //newLayer.focus();
     }
 
     //--------------------------------------------
@@ -452,6 +448,19 @@ class XRFCanvasStack extends HTMLElement
             this.removeAttribute('height');
             this.setAttribute('height', this.style.height);
         }
+    }
+    
+    //--------------------------------------------
+    // get/set src.
+    //--------------------------------------------
+    set src(val)
+    {
+        this._baseImg.src = val;
+    }
+
+    get src()
+    {
+        return this._baseImg.src;
     }
 
     //--------------------------------------------
