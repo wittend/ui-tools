@@ -12,6 +12,7 @@
         <link type='text/css' rel='stylesheet' href='rfstack.css'>
         <script type='text/javascript' src='defaulthandlers.js' ></script>
         <script type='text/javascript' src='rflayer.js' ></script>
+        <script type='text/javascript' src='rfimage.js' ></script>
         <script type='text/javascript' src='rfstack.js' ></script>
         <script type='text/javascript'>
             // jshint unused:           false
@@ -21,37 +22,73 @@
             
             document.addEventListener('DOMContentLoaded', function()
             {
-                let el;
-                el = document.querySelector('#btnDraw').onclick     = btnClick;
-                el = document.querySelector('#btnMeasure').onclick  = btnClick;
-                el = document.querySelector('#btnHideAll').onclick  = localHideAll;
-                el = document.querySelector('#btnShowAll').onclick  = localShowAll;
-                el = document.querySelector('#btnClearAll').onclick = localClearAll;        // must reference a local function which *calls* the  widget's handler or the handler will execute in the local context.
+                // Set up the local buttons to interact with the  Stack object
+                //-----------------------------------------
+                document.querySelector('#btnDraw').onclick     = btnClick;
+                document.querySelector('#btnMeasure').onclick  = localHideImage;
+                document.querySelector('#btnHideAll').onclick  = localHideAll;
+                document.querySelector('#btnShowAll').onclick  = localShowAll;
+                document.querySelector('#btnClearAll').onclick = localClearAll;        // must reference a local function which *calls* the  widget's handler or the handler will execute in the local context.
 
+                // Get the Stack
+                //-----------------------------------------
                 let stack = document.querySelector('#newStack');
+                
+                // Set house events using local handlers below.
+                //-----------------------------------------
                 //stack.layerMouseDown('layer2', localMouseDown);
                 //stack.layerMouseMove('layer2', localMouseMove);
                 //stack.layerMouseUp('layer2',   localMouseUp);
                 
-                stack.src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/GEORGE.JPG';
-                
+                // Set house events using MouseHandler Class
+                //-----------------------------------------
                 stack.layerMouseDown('layer2', mh.mouseDown);
                 stack.layerMouseMove('layer2', mh.mouseMove);
                 stack.layerMouseUp('layer2',   mh.mouseUp);
+
+                // Set the background  image for the stack
+                //-----------------------------------------
+                //stack.src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/GEORGE.JPG';
             });
             
+            
+            //-----------------------------------------
+            // toggle visibility of baseImg
+            //-----------------------------------------
+            function localHideImage(e)
+            {
+                console.log(`non-default localHideImage received by: [ ${e.currentTarget.id} ].`);
+                if(document.querySelector('#newStack').hidden)
+                {
+                    document.querySelector('#newStack').hidden = false;
+                }
+                else
+                {
+                    document.querySelector('#newStack').hidden = true;
+                }
+            }
+
+            //-----------------------------------------
+            // hide all of the canvas layers
+            //-----------------------------------------
             function localHideAll(e)
             {
                 console.log(`non-default localHideAll received by: [ ${e.currentTarget.id} ].`);
                 document.querySelector('#newStack').hideAll();
             }
 
+            //-----------------------------------------
+            // Show all of the canvas layers
+            //-----------------------------------------
             function localShowAll(e)
             {
                 console.log(`non-default localShowAll received by: [ ${e.currentTarget.id} ].`);
                 document.querySelector('#newStack').showAll();
             }
 
+            //-----------------------------------------
+            // Clear all of the canvas layers
+            //-----------------------------------------
             function localClearAll(e)
             {
                 console.log(`non-default localClearAll received by: [ ${e.currentTarget.id} ].`);
@@ -77,11 +114,6 @@
             
             function localMouseMove(e)
             {
-                // console.log(`non-default MouseDown received by: [ ${e.currentTarget.id}].`);
-                //    console.log(`non-default localMouseMove received by: [ '#${this.parentNode.host.id}' ].`);
-                //    let ctx = this.parentNode.host._canvas.getContext('2d');
-                //    let canvas = this.parentNode.host._canvas;
-                //    let ctx2 = this.parentNode.host.canvas.getContext('2d');
                 if(mouseDown)
                 {
                     ctx.lineTo(e.clientX, e.clientY);
@@ -91,11 +123,7 @@
             
             function localMouseUp(e)
             {
-                // console.log(`non-default MouseDown received by: [ ${e.currentTarget.id}].`);
                 console.log(`non-default localMouseUp received by: [ '#${this.parentNode.host.id}' ].`);
-                //let ctx = this.parentNode.host._canvas.getContext('2d');
-                //let canvas = this.parentNode.host._canvas;
-                //let ctx2 = this.parentNode.host.canvas.getContext('2d');
                 if(mouseDown)
                 {
                     ctx.lineTo(e.clientX, e.clientY);
@@ -111,7 +139,6 @@
             
             function msg(e)
             {
-                //alert('Got: ${e.eventName} from: ${e.target}.')
                 alert(`Got: ${e.currentTarget.id}.`);
             }
 
@@ -123,7 +150,7 @@
     
                 <rf-canvasstack id='newStack'>
 
-                    <!-- img id='img0' slot='baseImgSlot' role='imglayer' src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/CHUNKIE.JPG'-->
+                    <img is='rf-imagelayer' id='baseImg' slot='baseImgSlot' role='imglayer' src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/CHUNKIE.JPG'></img>
 
                     <rf-canvaslayer id='layer0' slot='canvasSlot' role='layer'></rf-canvaslayer>
                     <rf-canvaslayer id='layer1' slot='canvasSlot' role='layer'></rf-canvaslayer>

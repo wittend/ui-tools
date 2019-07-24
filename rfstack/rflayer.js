@@ -29,17 +29,13 @@ layerTmpl.innerHTML = `
         }
         .layer-canvasClass
         {
-/*        
-            height:                 100%;
-            width:                  100%;
-*/            
         }
     </style>
     <canvas class='layer-canvasClass'>canvas</canvas>
 `;
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// <XRFCanvasLayer>    [eXtended Img element]
+// <XRFCanvasLayer>    
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // class XRFCanvasLayer extends HTMLCanvasElement
 class XRFCanvasLayer extends HTMLElement
@@ -53,36 +49,31 @@ class XRFCanvasLayer extends HTMLElement
     constructor()
     {
         super();
-        this.selected   = false;
         this._canvas    = null;
         
         this.attachShadow({mode: 'open'});
         this.shadowRoot.appendChild(layerTmpl.content.cloneNode(true));
         
-        //this._canvas    = this.shadowRoot.querySelector('.layer-canvasClass');
+        this._canvas    = this.shadowRoot.querySelector('.layer-canvasClass');
     }
     
     //--------------------------------------------
-    // Upgrade Properties.
+    // Respond to connection event.
     //--------------------------------------------
-    _upgradeProperty(prop)
+    connectedCallback()
     {
-        if(this.hasOwnProperty(prop))
-        {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }        
-
+        let p = this.parentNode;
+        //let im = 
+        p.lastChild.style.zIndex = p._canvasCount; 
+        console.log(`[ XRFCanvasLayer ].connectedCallback() :: New layer: [ ${this.id} ] :: Parent: [ ${p.id} ] :: Stack length: [ ${p._canvasCount} ].`);
+    }
+    
     //--------------------------------------------
     // Monitored attributes.
     //--------------------------------------------
     static get observedAttributes()
     {
-//        return ['active', 'width', 'height', 'onmousedown'];
         return ['width', 'height', 'onmousedown'];
-        //return ['width', 'height'];
     }
  
     //--------------------------------------------
@@ -140,23 +131,6 @@ class XRFCanvasLayer extends HTMLElement
     {
         console.log(`[ XRFCanvasLayer ].disconnectedCallback().`);
     }
-
-    //============================================
-    // getters/setters properties.
-    //============================================
-
-    ////--------------------------------------------
-    //// get/set src.
-    ////--------------------------------------------
-    //get visible()
-    //{
-    //    return this._canvas.style.display;
-    //}
-    //
-    //set visible(val)
-    //{
-    //    return this._canvas.style.display = val;
-    //}
 
     //--------------------------------------------
     // get canvas
@@ -238,9 +212,8 @@ class XRFCanvasLayer extends HTMLElement
     {
         this._canvas.onmousedown = response;
     }
-    
 }
-
+ 
 //--------------------------------------------
 // Register custom element ('tag').
 //--------------------------------------------

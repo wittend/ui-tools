@@ -32,12 +32,12 @@ tmplStack.innerHTML = `
         }
         #baseImg
         {
-        /*
+/*        
             visibility:             hidden;
-        */
+            display:                none;
+*/
         }
     </style>
-    <img id='baseImg' slot='baseImgSlot' role='imglayer' src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/CHUNKIE.JPG'>
     <slot id='baseImgSlot' name='baseImgSlot'>
         <summary>Slot to accomodate base image element(s).</summary>
     </slot>
@@ -45,6 +45,8 @@ tmplStack.innerHTML = `
         <summary>Slot to accomodate canvas elements.</summary>
     </slot>
 `;
+
+//    <!--img id='baseImg' slot='baseImgSlot' role='imglayer'-->
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // <XRFCanvasStack>    [A stack of canvas elements]
@@ -57,11 +59,13 @@ class XRFCanvasStack extends HTMLElement
     constructor()
     {
         const self          = super();
-        this._imgsrc         = '';
-        this._imgalt         = '';
-        this._baseImg        = null;
-        this._canvasCount    = 0;
-        this._imageCount     = 1;
+        this._imgsrc        = '';
+        this._imgalt        = '';
+        this._baseImg       = null;
+        this._canvasCount   = 0;
+        this._canvasList    = [];
+        this._imageCount    = 1;
+        this._imageList     = [];
 
         this.attachShadow({mode: 'open'});
         this.shadowRoot.appendChild(tmplStack.content.cloneNode(true));
@@ -71,6 +75,9 @@ class XRFCanvasStack extends HTMLElement
 
         this._canvasLayerSlot = this.shadowRoot.querySelector('slot[name=canvasSlot]');
         this._canvasLayerSlot.addEventListener('slotchange', this._onCanvasSlotChange);
+
+        //this._baseImg = this.shadowRoot.querySelector('img#baseImg');
+
     }
     
     //--------------------------------------------
@@ -116,7 +123,11 @@ class XRFCanvasStack extends HTMLElement
                 case 'src':
                     this.imgsrc = newVal;
                     this._baseImg.src = newVal;
-                    //this.shadowRoot.querySelector('#baseImg').src = this.imgsrc;
+                    if(this._canvasCount > 0)
+                    {
+                        //let ctx = this._canvasList[0].getContext('2d');
+                        //ctx.drawImage(this._baseImg, 0, 0);
+                    }
                     break;
                 case 'alt':
                     this.imgalt = newVal;
@@ -145,6 +156,8 @@ class XRFCanvasStack extends HTMLElement
         if(this._baseImg == null)
         {
             this._baseImg = this.shadowRoot.querySelector('img#baseImg');
+//            this._baseImg.hidden = true;
+            this._imageList[0] = this._baseImg;
         }
     }
     
@@ -173,9 +186,10 @@ class XRFCanvasStack extends HTMLElement
     //--------------------------------------------
     _onCanvasSlotChange(e)
     {
-        const pEl = this.parentNode.host;    //.querySelector('rf-canvaslayer');
-        pEl._canvasCount++;
-        console.log(`[ XRFCanvasStack#${this.id} ]._onCanvasSlotChange() : canvasCount: [ ${pEl._canvasCount} ] id: [ ${pEl.lastElementChild.id} ].`);
+        const p = this.parentNode.host;    //.querySelector('rf-canvaslayer');
+        p._canvasList[p._canvasCount] = p.lastElementChild; 
+        p._canvasCount++;
+        console.log(`[ XRFCanvasStack#${this.id} ]._onCanvasSlotChange() : canvasCount: [ ${p._canvasCount} ] id: [ ${p.lastElementChild.id} ].`);
     }
 
     //--------------------------------------------
@@ -183,9 +197,14 @@ class XRFCanvasStack extends HTMLElement
     //--------------------------------------------
     _onImgSlotChange(e)
     {
-        const pEl = this.parentNode.host;
-        pEl._imageCount++;
-        console.log(`[ XRFCanvasStack#${this.id} ]._onImgSlotChange() : imageCount: [ ${pEl._imageCount} ] id: [ ${pEl.lastElementChild.id} ].`);
+        const p = this.parentNode.host;
+        if(p.lastElementChild.id == 'baseImg')
+        {
+            p._baseImg = p.lastElementChild;
+        }
+        p._imageList[p._imageCount] = p.lastElementChild; 
+        p._imageCount++;
+        console.log(`[ XRFCanvasStack#${this.id} ]._onImgSlotChange() : imageCount: [ ${p._imageCount} ] id: [ ${p.lastElementChild.id} ].`);
     }
     
     //============================================
@@ -276,9 +295,9 @@ class XRFCanvasStack extends HTMLElement
     fillBackground()
     {
         //debugger;
-        let ctx = this.copyCanvas.getContext('2d');
+        let ctx = this._copyCanvas.getContext('2d');
         ctx.fillStyle = this.backgroundColor;
-        ctx.fillRect(0, 0, this.copyCanvas.width, this.copyCanvas.height);
+        ctx.fillRect(0, 0, this._copyCanvas.width, this._copyCanvas.height);
      }
 
     //------------------------------------------
@@ -451,6 +470,19 @@ class XRFCanvasStack extends HTMLElement
     }
     
     //--------------------------------------------
+    // get/set hidden.
+    //--------------------------------------------
+    set hidden(val)
+    {
+        this._baseImg.hidden = Boolean(val);
+    }
+
+    get hidden()
+    {
+        return this._baseImg.hidden;
+    }
+
+    //--------------------------------------------
     // get/set src.
     //--------------------------------------------
     set src(val)
@@ -481,62 +513,4 @@ class XRFCanvasStack extends HTMLElement
 // Register custom element ('tag').
 //--------------------------------------------
 customElements.define('rf-canvasstack', XRFCanvasStack);
-
-//--------------------------------------------
-// save
-//--------------------------------------------
-    ////--------------------------------------------
-    //// get/set src.
-    ////--------------------------------------------
-    //get src()
-    //{
-    //    return this.hasAttribute('src');
-    //}
-    //
-    //set src(val)
-    //{
-    //    const isEq = (val !== this.imgsrc);
-    //    if(isEq)
-    //    {
-    //        this.setAttribute('src', val);
-    //    }
-    //}
-    //
-    ////--------------------------------------------
-    //// get/set alt.
-    ////--------------------------------------------
-    //get alt()
-    //{
-    //    return this.hasAttribute('alt');
-    //}
-    //
-    //set alt(val)
-    //{
-    //    const isEq = (val !== this.imgalt);
-    //    if(isEq)
-    //    {
-    //        this.setAttribute('alt', val);
-    //    }
-    //}
-    //
-    ////--------------------------------------------
-    //// _linkLayers()
-    ////--------------------------------------------
-    //_linkLayers()
-    //{
-    //    console.log(`[XRFCanvasStack${this.id}]._linkLayers()`);
-    //    const layers = this._allLayers();
-    //    layers.forEach(layer =>
-    //    {
-    //        //layer = layer.nextElementSibling;
-    //        if(layer.tagName.toLowerCase() !== 'rf-canvaslayer')
-    //        {
-    //            console.error(`layer #${layer.id} is not a` + `sibling of a <rf-canvaslayer>`);
-    //            return;
-    //        }
-    //        layer.setAttribute('aria-controls', layer.id);
-    //    });
-    //    const selectedLayer = layers.find(layer => layer.selected) || layers[0];
-    //    this._selectLayer(selectedLayer);
-    //}
 

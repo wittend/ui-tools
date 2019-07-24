@@ -3,7 +3,7 @@
 //
 // Purpose:         Base class for stackable canvas overlays.
 //
-// Created:        2019/07/02
+// Created:         2019/07/02
 // Copyright (c):   David M. Witten II
 //--------------------------------------------------------------
 // jshint esversion:        6
