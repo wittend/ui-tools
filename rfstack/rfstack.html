@@ -18,7 +18,9 @@
             // jshint unused:           false
             // jshint undef:            false
             
-            let mh = new MouseHandler();
+            let dmh = new DrawMouseHandler();
+            let mmh = new MeasureMouseHandler();
+            let mag = new MagnifierMouseHandler();
             
             document.addEventListener('DOMContentLoaded', function()
             {
@@ -40,13 +42,25 @@
                 //stack.layerMouseMove('layer2', localMouseMove);
                 //stack.layerMouseUp('layer2',   localMouseUp);
                 
-                // Set house events using MouseHandler Class
+                // Set layer1 mouse events using MeasureMouseHandler Class
                 //-----------------------------------------
-                stack.layerMouseDown('layer2', mh.mouseDown);
-                stack.layerMouseMove('layer2', mh.mouseMove);
-                stack.layerMouseUp('layer2',   mh.mouseUp);
+                stack.layerMouseDown('layer2', mmh.mouseDown);
+                stack.layerMouseMove('layer2', mmh.mouseMove);
+                stack.layerMouseUp('layer2',   mmh.mouseUp);
 
-                // Set the background  image for the stack
+                // Set layer2 mouse events using DrawMouseHandler Class
+                //-----------------------------------------
+                stack.layerMouseDown('layer1', dmh.mouseDown);
+                stack.layerMouseMove('layer1', dmh.mouseMove);
+                stack.layerMouseUp('layer1',   dmh.mouseUp);
+
+                //// Set layer3 mouse events using MagnifierMouseHandler Class
+                ////-----------------------------------------
+                //stack.layerMouseDown('layer3', mag.mouseDown);
+                //stack.layerMouseMove('layer3', mag.mouseMove);
+                //stack.layerMouseUp('layer3',   mag.mouseUp);
+
+                // change the background  image for the stack
                 //-----------------------------------------
                 //stack.src='/home/dave/Projects/nwjs-dev/ui-tools/rfstack/testdata/GEORGE.JPG';
             });
@@ -100,11 +114,8 @@
 
             function localMouseDown(e)
             {
-                // console.log(`non-default MouseDown received by: [ ${e.currentTarget.id}].`);
                 console.log(`non-default localMouseDown received by: [ '#${this.parentNode.host.id}' ].`);
                 ctx = this.parentNode.host._canvas.getContext('2d');
-                // let canvas = this.parentNode.host._canvas;
-                // let ctx2 = this.parentNode.host.canvas.getContext('2d');
  
                 ctx.strokeStyle = "#FF0000";
                 mouseDown = true;
@@ -141,7 +152,6 @@
             {
                 alert(`Got: ${e.currentTarget.id}.`);
             }
-
         </script> 
     </head>
     <body id='theBody'>
@@ -155,6 +165,7 @@
                     <rf-canvaslayer id='layer0' slot='canvasSlot' role='layer'></rf-canvaslayer>
                     <rf-canvaslayer id='layer1' slot='canvasSlot' role='layer'></rf-canvaslayer>
                     <rf-canvaslayer id='layer2' slot='canvasSlot' role='layer'></rf-canvaslayer>
+                    <!-- rf-canvaslayer id='layer3' slot='canvasSlot' role='layer'></rf-canvaslayer -->
 
                 </rf-canvasstack>
                 <div id='buttonFrame' class='positionFrameClass'>
